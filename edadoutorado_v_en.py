@@ -26,27 +26,13 @@ plt.rcParams['axes.titlesize'] = 16
 plt.rcParams['xtick.labelsize'] = 11
 plt.rcParams['ytick.labelsize'] = 11
 
-# =============================================================================
-# 1. DATA LOADING
-# =============================================================================
-
-print("="*80)
-print("EXPLORATORY DATA ANALYSIS - INPATIENT CLAIMS SAMPLE 1")
-print("="*80)
-
+# DATA LOADING
 # Load processed data
 df = pd.read_csv('inpatient_claims_sample1_model_features_V_EN.csv')
 print(
     f"\nDataset loaded: {df.shape[0]} registros e {df.shape[1]} attributes")
 
-# =============================================================================
-# 2. GENERAL DESCRIPTIVE ANALYSIS
-# =============================================================================
-
-print("\n" + "="*80)
-print("2. GENERAL DESCRIPTIVE ANALYSIS")
-print("="*80)
-
+# GENERAL DESCRIPTIVE ANALYSIS
 print("\nData Types by Column:")
 print(df.dtypes.value_counts())
 
@@ -56,13 +42,7 @@ print(df.info())
 print("\nStatistical summary of numerical variables:")
 display(df.describe())
 
-# =============================================================================
-# 3. ANALYSIS OF MISSING VALUES
-# =============================================================================
-
-print("\n" + "="*80)
-print("3. ANALYSIS OF MISSING VALUES")
-print("="*80)
+# ANALYSIS OF MISSING VALUES
 
 missing_data = df.isnull().sum()
 missing_data = missing_data[missing_data > 0].sort_values(ascending=False)
@@ -86,16 +66,8 @@ if len(missing_data) > 0:
 else:
     print("\nNo missing values found!")
 
-# =============================================================================
-# 4. DISTRIBUTION CHARTS - NUMERICAL ATTRIBUTES
-# =============================================================================
-
-print("\n" + "="*80)
-print("4. DISTRIBUTION CHARTS")
-print("="*80)
-
+# DISTRIBUTION CHARTS - NUMERICAL ATTRIBUTES
 # Function to create a grid of charts
-
 
 def plot_distribution_grid(df, columns, n_cols=3, figsize=(18, 12)):
     n_rows = (len(columns) + n_cols - 1) // n_cols
@@ -104,7 +76,7 @@ def plot_distribution_grid(df, columns, n_cols=3, figsize=(18, 12)):
 
     for i, col in enumerate(columns):
         if i < len(axes):
-            # Histograma
+            # Histogram
             axes[i].hist(df[col].dropna(), bins=50, alpha=0.7,
                          edgecolor='black', linewidth=0.5)
             axes[i].axvline(df[col].mean(), color='red',
@@ -130,14 +102,7 @@ print("\nDistribution of the main numerical variables:")
 plot_distribution_grid(
     df, main_numeric_existentes[:6], n_cols=3, figsize=(18, 12))
 
-# =============================================================================
-# 5. ANALYSIS OF CATEGORICAL VARIABLES
-# =============================================================================
-
-print("\n" + "="*80)
-print("5. ANALYSIS OF CATEGORICAL VARIABLES")
-print("="*80)
-
+#  ANALYSIS OF CATEGORICAL VARIABLES
 # Identificar variáveis categóricas
 categorical_cols = df.select_dtypes(include=['object']).columns.tolist()
 print(f"\nVariáveis categóricas: {len(categorical_cols)} colunas")
@@ -183,15 +148,7 @@ if 'ADMTNG_CATEGORY_freq' in df.columns:
     plt.tight_layout()
     plt.show()
 
-# =============================================================================
-# 6. ANALYSIS OF BIVARIATE RELATIONSHIPS
-# =============================================================================
-
-print("\n" + "="*80)
-print("6. ANALYSIS OF BIVARIATE RELATIONSHIPS")
-print("="*80)
-
-
+#  ANALYSIS OF BIVARIATE RELATIONSHIPS
 # Analysis of Correlations Between Categorical and Continuous Variables
 if 'CLM_DRG_CD_freq' in df.columns and 'TOTALCOST' in df.columns:
     print("\nAverage Cost per DRG (Top 10):")
