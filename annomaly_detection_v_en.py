@@ -30,14 +30,7 @@ sns.set_palette("husl")
 plt.rcParams['figure.figsize'] = (12, 8)
 plt.rcParams['font.size'] = 11
 
-print("="*80)
-print("ANOMALY DETECTION - (16 FEATURES)")
-print("="*80)
-
-# =============================================================================
-# 1. DATA LOADING
-# =============================================================================
-
+#  DATA LOADING
 # Load processed data
 df = pd.read_csv('inpatient_claims_sample1_model_features_V_EN.csv')
 print(
@@ -49,12 +42,7 @@ print(df.info())
 print("\nData Types by Column:")
 print(df.dtypes.value_counts())
 
-# =============================================================================
-# 2.  2. DATA PREPARATION (ALL 16 FEATURES)
-# =============================================================================
-
-print("\n2. Preparing data with all 16 features...")
-
+# DATA PREPARATION (ALL 16 FEATURES)
 # Numerical features (13)
 features_numericas = [
     'LOS', 'CLM_PMT_AMT', 'TOTALCOST', 'COST_PER_DAY',
@@ -107,14 +95,7 @@ X_pca = pca.fit_transform(X_scaled)
 print(
     f"Variância explicada: PC1={pca.explained_variance_ratio_[0]:.3f}, PC2={pca.explained_variance_ratio_[1]:.3f}")
 
-# =============================================================================
-# 3. K-MEANS WITH OPTIMIZATION
-# =============================================================================
-
-print("\n" + "="*80)
-print("3. K-MEANS COM OTIMIZAÇÃO")
-print("="*80)
-
+# K-MEANS WITH OPTIMIZATION
 # Optimizing the Number of Clusters
 print("\nOptimizing the Number of Clusters.")
 n_clusters_range = range(2, 11)
@@ -199,14 +180,7 @@ for i in range(best_k):
     cluster_silhouette = sample_silhouette_values[kmeans_labels == i].mean()
     print(f"  - Cluster {i}: {cluster_silhouette:.3f}")
 
-# =============================================================================
-# 4. ISOLATION FOREST WITH OPTIMIZATION
-# =============================================================================
-
-print("\n" + "="*80)
-print("4. ISOLATION FOREST WITH OPTIMIZATION")
-print("="*80)
-
+# ISOLATION FOREST WITH OPTIMIZATION
 # Grid de parâmetros para otimização
 param_grid_iforest = {
     'contamination': [0.05, 0.10, 0.15],
@@ -268,14 +242,7 @@ print(f"  - Average score: {iforest_scores.mean():.4f}")
 print(f"  - Minimum score: {iforest_scores.min():.4f}")
 print(f" - Maximum score: {iforest_scores.max():.4f}")
 
-# =============================================================================
-# 5.  LOCAL OUTLIER FACTOR (LOF) WITH OPTIMIZATION
-# =============================================================================
-
-print("\n" + "="*80)
-print("5. LOCAL OUTLIER FACTOR (LOF) WITH OPTIMIZATION")
-print("="*80)
-
+#  LOCAL OUTLIER FACTOR (LOF) WITH OPTIMIZATION
 # Parameter grid for optimization
 param_grid_lof = {
     'contamination': [0.05, 0.10, 0.15],
@@ -340,14 +307,7 @@ print(f"  - Average score: {lof_scores.mean():.4f}")
 print(f"  - Minimum score: {lof_scores.min():.4f}")
 print(f"  - Maximum score: {lof_scores.max():.4f}")
 
-# =============================================================================
-# 6. ADVANCED COMPARISON OF ALGORITHMS
-# =============================================================================
-
-print("\n" + "="*80)
-print("6. ADVANCED COMPARISON OF ALGORITHMS")
-print("="*80)
-
+# ADVANCED COMPARISON OF ALGORITHMS
 # Create a dataframe with the results
 results_df = pd.DataFrame({
     'Index': np.arange(len(X_scaled)),
@@ -402,14 +362,7 @@ categories = [
 for name, mask in categories:
     print(f"  - {name}: {mask.sum()} ({mask.mean()*100:.1f}%)")
 
-# =============================================================================
-# 7. ADVANCED VIEWS
-# =============================================================================
-
-print("\n" + "="*80)
-print("7. GENERATING ADVANCED VISUALIZATIONS.")
-print("="*80)
-
+# ADVANCED VIEWS
 # Plot 1: PCA projection with anomalies
 fig, axes = plt.subplots(2, 2, figsize=(16, 14))
 
@@ -440,7 +393,7 @@ axes[1, 0].set_ylabel(f'PC2 ({pca.explained_variance_ratio_[1]:.3f})')
 axes[1, 0].grid(True, alpha=0.3)
 plt.colorbar(scatter3, ax=axes[1, 0], label='Anomalies (1=Yes)')
 
-# Consenso
+# Consensu
 scatter4 = axes[1, 1].scatter(X_pca[:, 0], X_pca[:, 1],
                               c=all_anomalies, cmap='RdYlGn_r', alpha=0.6, s=8)
 axes[1, 1].set_title(f'Consensus - Anomalies Detected by Everyone')
@@ -453,7 +406,6 @@ plt.tight_layout()
 plt.show()
 
 # Plot : Venn Diagram (Intersection)
-
 fig, ax = plt.subplots(figsize=(10, 8))
 
 # Create sets
@@ -476,14 +428,7 @@ for subset in ('100', '010', '001', '110', '101', '011', '111'):
 plt.tight_layout()
 plt.show()
 
-# =============================================================================
-# 8. ANALYSIS OF THE DETECTED ANOMALIES
-# =============================================================================
-
-print("\n" + "="*80)
-print("8. ANALYSIS OF THE DETECTED ANOMALIES")
-print("="*80)
-
+#  ANALYSIS OF THE DETECTED ANOMALIES
 # Add flags to the original dataset
 df_anomalies = df.copy()
 df_anomalies['ANOMALIA_KMEANS'] = kmeans_anomalies
@@ -556,13 +501,8 @@ if 'CLM_DRG_CD_freq' in df_anomalies.columns:
     plt.tight_layout()
     plt.show()
 
-# =============================================================================
-# 9. SAVE RESULTS
-# =============================================================================
 
-print("\n" + "="*80)
-print("9. SAVING RESULTS")
-print("="*80)
+# SAVE RESULTS
 
 # Save dataset with flags
 output_file = 'inpatient_anomalies_improved_16features.csv'
